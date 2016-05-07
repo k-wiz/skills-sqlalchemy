@@ -40,7 +40,8 @@ db.session.query(Brand.name).filter(Brand.founded==1903, Brand.discontinued == N
 
 # Get all brands that are either 1) discontinued (at any time) or 2) founded 
 # before 1950.
-db.session.query(Brand.name, Brand.founded, Brand.discontinued).filter((Brand.discontinued != None) | (Brand.founded < 1950)).all()
+db.session.query(Brand.name, Brand.founded, Brand.discontinued).filter((Brand.discontinued != None) | 
+                                                                        (Brand.founded < 1950)).all()
 
 # Get any model whose brand_name is not Chevrolet.
 db.session.query(Model.brand_name, Model.name).filter(Model.brand_name != 'Chevrolet').all()
@@ -54,7 +55,8 @@ def get_model_info(year):
     # Why doesn't this work? -->
     # db.session.query(Model.name, Model.brand_name, Model.brand.headquarters).filter(Model.year==year).all()
 
-    model_info = db.session.query(Model.name, Model.brand_name, Brand.headquarters).join(Brand).filter(Model.year==1958).all()
+    model_info = db.session.query(Model.name, Model.brand_name, 
+                                Brand.headquarters).join(Brand).filter(Model.year==1958).all()
 
     for model, brand, hq in model_info:
         print model, brand, hq
@@ -81,14 +83,27 @@ def get_brands_summary():
 """ An association table is a table that does nothing but associate one 
 table with another table (or multiple tables). It does this by referencing 
 the primary keys of each table. An association table 
-manages a many-to-many relationship."""
+manages a many-to-many relationship. """
 
 # -------------------------------------------------------------------
 # Part 3
 
 def search_brands_by_name(mystr):
-    pass
+    """ Takes in a string as parameter, returns a list of objects whose name
+    contains or is equal to the input string. """
+
+    brands_by_name = db.session.query(Brand).filter(Brand.name.like('%mystr%')).all()
+
 
 
 def get_models_between(start_year, end_year):
-    pass
+    """ Takes in a start year and end year, returns a list of objects that are 
+    models with years that fall between the start year (inclusive) and end 
+    year (exclusive). """
+
+    models_between = db.session.query(Model).filter(Model.year >= start_year, 
+                                                    Model.year < end_year).all()
+
+
+
+
