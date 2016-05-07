@@ -16,9 +16,9 @@ class Model(db.Model):
     """Car model."""
 
     __tablename__ = "models"
-   
+    
     id = db.Column(db.Integer, primary_key=True)
-    year = db.Column(db.Integer, nullable=False)
+    year = db.Column(db.Inkteger, nullable=False)
     brand_name = db.Column(db.Integer, 
                             db.ForeignKey('brands.name'),
                             nullable=True)
